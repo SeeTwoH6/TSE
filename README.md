@@ -4,8 +4,8 @@ Plan
 
 What have we done?
 Adam - Constructing debug menu WIP
-EMily - Basic app design, basic database design, started T&Cs
-Sven - Nothing
+Emily - Basic app design, basic database design, started T&Cs
+Sven - 
 Ethan - Made a document of games and other tasks like comp vision. 
 Games are Reaction Time, Counting Block, Balancing Game, Memory Game. Using agile methodology.
 
