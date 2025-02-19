@@ -1,11 +1,12 @@
 import tkinter
-
 def main():
     #creates a window
     root = tkinter.Tk()
     debug()
     #emulates a phone screen menu size
     root.geometry("360x640")
+
+    root.resizable(False, False)
     #GUI loop
     root.mainloop()
 
@@ -21,8 +22,10 @@ def debug():
     #    ...
     #if debug_input == 3:
     #    ...
-    #if debug_input == 4:
-    #    ...
+    if debug_input == 4:
+        ...
+        
+
 
 if __name__ == "__main__":
     main()
