@@ -23,15 +23,21 @@ bg = pg.Surface((screenWidth, screenHeight))
 bg.fill('lightblue')
 
 #Load the main image
-cube = pg.image.load('Games/Counting/Images/cube.png')
-cubeSize = (150,150)
+cubeColours = 'redcube, bluecube, orangecube, yellowcube, pinkcube, purplecube, greencube, cyancube, lightbluecube'
+image = cubeColours[random.randint(0,len(cubeColours)-1)]
+cube = pg.image.load(f'Games/Counting/Images/{image}.png')
+cubeSize = (275,150)
 cube = pg.transform.scale(cube, cubeSize)
 
 #Set Framerate
 clock = pg.time.Clock()
 
 #Create the number of squares to generate
-numOfCubes = random.randint(1,10)
+level = 10
+numOfCubes = random.randint(1,level)
+blockLength = random.randint(1,15)
+blockWidth = random.randint(1,5)
+blockHeight = random.randint(1,4)
 
 while True:
     #Event Loop to check for player input
@@ -47,7 +53,7 @@ while True:
     for i in range(numOfCubes):
         screen.blit(cube, (500 + offsetX, 300 + offsetY))
         offsetX += 55
-        offsetY += 28
+        offsetY += 26
 
     pg.display.update()
     clock.tick(60)
