@@ -23,21 +23,76 @@ bg = pg.Surface((screenWidth, screenHeight))
 bg.fill('lightblue')
 
 #Load the main image
-cubeColours = 'redcube, bluecube, orangecube, yellowcube, pinkcube, purplecube, greencube, cyancube, lightbluecube'
-image = cubeColours[random.randint(0,len(cubeColours)-1)]
-cube = pg.image.load(f'Games/Counting/Images/{image}.png')
-cubeSize = (275,150)
-cube = pg.transform.scale(cube, cubeSize)
+cubeColours = ["redcube", "bluecube", "orangecube", "yellowcube", "pinkcube", "purplecube", "greencube", "cyancube", "lightbluecube"]
 
 #Set Framerate
 clock = pg.time.Clock()
 
+
 #Create the number of squares to generate
 level = 10
 numOfCubes = random.randint(1,level)
-blockLength = random.randint(1,15)
+answer = numOfCubes
+blockLength = random.randint(1,10)
 blockWidth = random.randint(1,5)
 blockHeight = random.randint(1,4)
+print(f"numOfCubes: {numOfCubes}" + '\n' +  f"blocklength: {blockLength}" + '\n' +  f"blockWidth: {blockWidth}" + '\n' + f"blockHeight: {blockHeight}")
+
+class Cube:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.cubeType = random.choice(cubeColours)  # Choose a fixed color at creation
+        self.image = pg.image.load(f'Games/Counting/Images/{self.cubeType}.png')
+        cubeSize = (275,150)
+        self.image = pg.transform.scale(self.image, cubeSize)
+
+    def draw(self, surface):
+        surface.blit(self.image, (self.x, self.y))
+
+#Origin point for construction is (750, 300)
+lineOffsetX = 55
+lineOffsetY = 26
+rowOffsetX = 0
+rowOffsetY = 0
+layerOffsetX = 0
+layerOffsetY = 0
+cubes = []
+
+#startingX = 750
+#startingY = 300
+cubesPlaced = False
+for layer in range(blockHeight):
+    #print(f"Layer: {layer}")
+    layerStartingX = 750
+    layerStartingY = 300 - (64 * layer)
+    for row in range(blockWidth):
+        #print(f"Row: {row}")
+        startingX = layerStartingX - (lineOffsetX * row)
+        #print(f"Layer starting x: {layerStartingX}")
+        startingY = layerStartingY + (lineOffsetY * row)
+        #print(f"Starting X for the second layer: {startingX}")
+        for line in range(blockLength):
+            #print(f"Line: {line}")
+            cubes.append(Cube(startingX + line * lineOffsetX, startingY + line * lineOffsetY))
+            #print(f"Adding cube with positions: {startingX + line * lineOffsetX} and {startingY + line * lineOffsetY}")
+            numOfCubes -= 1
+            #print(f"Num of cubes remaining: {numOfCubes}")
+            if numOfCubes <= 0:
+                cubesPlaced = True
+                break
+        if cubesPlaced:
+            break
+    if cubesPlaced:
+        break
+        
+
+'''
+Testing Initial Positions
+cube = pg.image.load(f'Games/Counting/Images/greencube.png')
+cube = pg.transform.scale(cube, (275,150))
+'''
+
 
 while True:
     #Event Loop to check for player input
@@ -46,14 +101,16 @@ while True:
             pg.quit()
             exit()
     
+    '''
+    Testing initial positions
+    screen.blit(cube, (750,300))
+    screen.blit(cube, (695,326))
+    screen.blit(cube, (750,236))  
+    '''
     screen.blit(bg, (0,0))
-
-    offsetX = 0
-    offsetY = 0
-    for i in range(numOfCubes):
-        screen.blit(cube, (500 + offsetX, 300 + offsetY))
-        offsetX += 55
-        offsetY += 26
+    
+    for cube in cubes:
+        cube.draw(screen)
 
     pg.display.update()
     clock.tick(60)
