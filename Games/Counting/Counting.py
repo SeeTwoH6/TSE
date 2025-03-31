@@ -19,8 +19,15 @@ screenWidth, screenHeight = info.current_w, info.current_h
 #Define Screen 
 screen = pg.display.set_mode((screenWidth - 10, screenHeight - 50), pg.RESIZABLE)
 pg.display.set_caption("Counting Game")
+
+#Background
 bg = pg.Surface((screenWidth, screenHeight))
 bg.fill('lightblue')
+
+#Answer Box
+answerBox = pg.image.load(f'Games/Counting/Images/answerBox.png')
+answerBox = pg.transform.scale(answerBox, (screenWidth, 500))
+
 
 #Load the main image
 cubeColours = ["redcube", "bluecube", "orangecube", "yellowcube", "pinkcube", "purplecube", "greencube", "cyancube", "lightbluecube"]
@@ -107,7 +114,10 @@ while True:
     screen.blit(cube, (695,326))
     screen.blit(cube, (750,236))  
     '''
+
     screen.blit(bg, (0,0))
+    screen.blit(answerBox, (0,1000))
+
     
     for cube in cubes:
         cube.draw(screen)
