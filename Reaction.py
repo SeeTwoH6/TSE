@@ -25,11 +25,13 @@ font_big = pg.font.SysFont('arial', 180)
 font_dot = pg.font.SysFont('arial', 550)
 font_small = pg.font.SysFont('arial', 50)
 
+
 # Helper function to center text
 def draw_centered_text(surface, text, font, color, y_offset=0):
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect(center=(surface.get_width() // 2, surface.get_height() // 2 + y_offset))
     surface.blit(text_surface, text_rect)
+
 
 clock = pg.time.Clock()
 game_state = "intro"
@@ -78,10 +80,16 @@ while True:
                 #This section is to either save the score or let the user play again
                 play_again = False
                 exit_game = False
-                if play_again:
+                exit_button_rect = pg.Rect(window_w/2, window_h/2, 140, 40)
+                
+                if exit_button_rect.collidepoint(event.pos):
+                    pg.quit()
+                    exit() 
+                elif play_again:
                     game_state = "intro"
                     loop = 0
                     reaction_times.clear()
+
 
 
 
@@ -130,6 +138,16 @@ while True:
         draw_centered_text(display_surface, f"{average_time:.2f} ms", font_big, WHITE, y_offset=80)
         draw_centered_text(display_surface, "Save your score to see how you compare", font_small, WHITE, y_offset=190)
 
+        exit_button_rect = pg.Rect(window_w // 2 - 70, window_h // 2 + 250, 140, 50)
+        pg.draw.rect(display_surface, WHITE, exit_button_rect)
+        exit_text = font_small.render("Exit", True, BLUE)
+        exit_text_rect = exit_text.get_rect(center=exit_button_rect.center)
+        display_surface.blit(exit_text, exit_text_rect)
+
+        if exit_button_rect.collidepoint(pg.mouse.get_pos()):
+            if pg.mouse.get_pressed()[0]:
+                pg.quit()
+                exit()
 
     pg.display.update()
     clock.tick(60)
