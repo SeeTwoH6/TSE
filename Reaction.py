@@ -14,10 +14,11 @@ display_surface = pg.display.set_mode((window_w - 10, window_h - 50), pg.RESIZAB
 pg.display.set_caption("Reaction Game")
 
 # Colors
-BLUE = (52,131,191)
+BLUE = (9,21,147)
 RED = (204,0,0)
 GREEN = (128,189,102)
 WHITE = (255,255,255)
+ORANGE = (204,85,0)
 
 # Fonts
 font_big = pg.font.SysFont('arial', 180)
@@ -52,6 +53,13 @@ while True:
             if game_state == "intro":
                 delay_time = random.randint(2000, 4000)
                 trigger_time = pg.time.get_ticks() + delay_time
+                game_state = "waiting"
+
+            elif game_state == "waiting":
+                if pg.time.get_ticks() < trigger_time:
+                    game_state = "too soon"
+            
+            elif game_state == "too soon":
                 game_state = "waiting"
                 
             elif game_state == "ready":
@@ -94,6 +102,12 @@ while True:
             draw_centered_text(display_surface, "CLICK NOW!", font_big, WHITE)
             start_time = pg.time.get_ticks()
             game_state = "ready"
+
+    elif game_state == "too soon":
+        display_surface.fill(ORANGE)
+        draw_centered_text(display_surface, "...", font_dot, WHITE, y_offset=-200)
+        draw_centered_text(display_surface, "Clicked Too Soon", font_big, WHITE, y_offset=100)
+        draw_centered_text(display_surface, "Click to try again", font_small, WHITE, y_offset=210)
 
     elif game_state == "ready":
         display_surface.fill(GREEN)
