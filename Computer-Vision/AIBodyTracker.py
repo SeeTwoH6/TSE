@@ -25,7 +25,8 @@ pTime = 0
 exercise = "Shoulder Press" #Detect which exercise is being performed, default = Shoulder Press
 reps = 0 #Count of how many repetitions of each exercise have been done
 sets = 0 #Count of how many sets of each exercise have been done
-direction = 0 #(0 is the concentric portion of the list, 1 is the eccentric portion of the lift)
+totalReps = 0
+direction = 0 #(0 is the concentric portion of the lift, 1 is the eccentric portion of the lift)
 repCompleted = False
 startExercise = False
 
@@ -55,7 +56,7 @@ def insertValues(exercise, sets, reps, duration):
         cursor.execute(query, (exerciseID, exercise, duration, 1, reps, sets))
         conn.commit()
         print(f"Added entry successfully, inserting: Ex ID: {exerciseID}, Type: {exercise}, Duration: {duration}, userID: {1}, reps: {reps}, sets: {sets}")
-    except mysql.connector.Error as error:
+    except Exception as error:
         print(f"Database connection error: {error}")
     finally:
         if conn.is_connected():
@@ -97,6 +98,7 @@ while True:
 
             if switch:
                 startTime = time.time()
+                totalReps = 0
 
             if startTime > 0:
                 if time.time() - startTime > 2:
@@ -125,6 +127,7 @@ while True:
 
             if switch:
                 startTime = time.time()
+                totalReps = 0
 
             if startTime > 0:
                 if time.time() - startTime > 2:
@@ -139,7 +142,6 @@ while True:
 
         #3 fingers resets the exercise
         if (fingers[1] and fingers[2] and fingers[3] and fingers[4] == False and fingers[0] == False) or (fingers[2] and fingers[3] and fingers[4] and fingers[1] == False):
-            print(f"Count: {count}")
             if count > 0:
                 switch = False
             else:
@@ -151,7 +153,6 @@ while True:
             else:
                 modeChanged = True
                 count += 1
-
 
             if switch:
                 startTime = time.time()
@@ -165,8 +166,7 @@ while True:
                         startDurationTimer = 0
                         print(f"Duration: {duration}")
                         insertValues(exercise, sets, reps, duration)
-                    sets = 0
-                    reps = 0
+                    totalReps = 0
 
         #4 fingers starts the exercise
         if fingers[0] == False and fingers[1] and fingers[2] and fingers[3] and fingers[4]:
@@ -184,7 +184,8 @@ while True:
 
             if switch:
                 startTime = time.time()
-                startDurationTimer = time.time()
+                if startDurationTimer != 0: #Starts the workout timer if it hasnt been started already
+                    startDurationTimer = time.time()
 
             if startTime > 0:
                 if time.time() - startTime > 2:
@@ -257,7 +258,7 @@ while True:
                 if (exercise == "Shoulder Press" and shoulderPressAngle >= 140) or (exercise == "Bicep Curls"):
                     if direction == 0 and not repCompleted: #Concentric
                         repCompleted = True
-                        reps += 1
+                        totalReps += 1
                         direction = 1
 
             if per == 0:
@@ -265,10 +266,9 @@ while True:
                     repCompleted = False
                     direction = 0
 
-
-        if reps % 12 == 0:
-            sets += 1
-            reps = 0
+        
+        sets = totalReps // 12
+        reps = totalReps % 12
         #Print Sets
         cv2.putText(img, f'Sets: {int(sets)}', (45,600), cv2.FONT_HERSHEY_PLAIN, 7, (255,0,0), 10)
         #Present the reps on screen
