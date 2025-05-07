@@ -139,8 +139,9 @@ class GUI:
 
     def foodIntake(self):
         self.destroy_widgets()
-        calorie_intake = cl.CalorieIntake(self.root)
-        calorie_intake.create_GUI()
+        #creates the calories intake GUI
+        self.calorie_intake = cl.CalorieIntake(self.root)
+        self.calorie_intake.create_GUI()
 
 
     

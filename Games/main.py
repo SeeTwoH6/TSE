@@ -1,5 +1,6 @@
 import tkinter
 import GUI
+
 def main():
     #creates a window
     root = tkinter.Tk()
