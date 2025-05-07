@@ -1,12 +1,14 @@
 import tkinter
+import GUI
 def main():
     #creates a window
     root = tkinter.Tk()
-    debug()
+    #debug()
     #emulates a phone screen menu size
     root.geometry("360x640")
-
     root.resizable(False, False)
+    gui = GUI.GUI(root)
+    gui.mainMenu()
     #GUI loop
     root.mainloop()
 

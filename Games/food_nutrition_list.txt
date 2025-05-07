@@ -1,0 +1,16 @@
+Food	Calories	Protein (g)	Fat (g)	Carbohydrates (g)
+Chicken Breast	165	31	3.6	0
+Salmon	208	20	13	0
+Eggs	143	13	10	1.1
+Brown Rice	123	2.7	1	25.6
+Quinoa	120	4.1	1.9	21.3
+Broccoli	34	2.8	0.4	7
+Almonds	579	21	49	22
+Peanut Butter	588	25	50	20
+Greek Yogurt (plain, nonfat)	59	10	0.4	3.6
+Apple	52	0.3	0.2	14
+Banana	89	1.1	0.3	23
+Oats	389	16.9	6.9	66.3
+Sweet Potato	86	1.6	0.1	20.1
+Avocado	160	2	15	9
+Tofu (firm)	144	15.5	8	3.9

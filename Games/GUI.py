@@ -1,16 +1,20 @@
 import tkinter as tk
 import button as bt
+from water import waterIntake
+import calorie as cl
 
 class GUI:
-    def __init__(self):
+    def __init__(self, root):
         #creates tkinter window
-        self.root = tk.Tk()
-        #signals the screen size
-        self.root.geometry("360x640")
-        #makes it so that the window size cannot be altered
-        self.root.resizable(False, False)
+        self.root = root
+    
+    def destroy_widgets(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
     def mainMenu(self):
+
+        self.destroy_widgets()
         #creates title
         title = tk.Label(self.root, text = "Home", font=("arial", 15, "bold"), fg="dark blue")
         #places title at the top
@@ -18,13 +22,7 @@ class GUI:
         #outputs title
         title.pack()
 
-        #creates menu button
-        menu_btn = bt.Button(self.root, "≡", 12, 0)
-        menu_btn.button_colour("white")
-        menu_btn.text_colour("dark blue")
-        menu_btn.font(("arial, 13"))
-        menu_btn.action(self.Navigation_btn())
-
+        self.navigation_btn()
 
         #health stats block summary
         stats_block = tk.Frame(self.root, bg="light grey", width=500, height=200)
@@ -35,18 +33,21 @@ class GUI:
         excecise_btn.button_colour("Dark Blue")
         excecise_btn.text_colour("white")
         excecise_btn.size(2, 47)
+        excecise_btn.action(self.cognative_excercises)
 
         #creates calorie button
         calorie_btn = bt.Button(self.root, "Calorie intake", 12, 310)
         calorie_btn.button_colour("Dark Blue")
         calorie_btn.text_colour("white")
         calorie_btn.size(2, 47)
+        calorie_btn.action(self.foodIntake)
 
         #creates water intake button
         water_btn = bt.Button(self.root, "Water Intake", 12, 350)
         water_btn.button_colour("Dark Blue")
         water_btn.text_colour("white")
         water_btn.size(2, 47)
+        water_btn.action(self.waterIntake)
 
         #creates excercise activity button
         exercise_btn = bt.Button(self.root, "Exercise Activity", 12, 390)
@@ -66,11 +67,93 @@ class GUI:
         sleep_btn.text_colour("white")
         sleep_btn.size(2, 47)
 
-        #creates the chatbox input (TBA) 
-        chat_box = tk.Entry(self.root, bg="light grey", fg="grey", borderwidth=0, width=58)
-        chat_box.place(x=5, y=575)
-        
-    #gives functionality to the navigation button
-    def Navigation_btn(self):
-        stats_block = tk.Frame(self.root, bg="white", width=600, height=360)
-        stats_block.place(x=0, y=20)
+    def navigation_btn(self):
+        #creates a menu button
+        menubar = tk.Menu(self.root)
+
+        menu = tk.Menu(menubar, tearoff=0)
+        menu.add_command(label="Home", command=self.mainMenu)
+        menu.add_command(label = "Cognative Excercises", command=self.cognative_excercises)
+        menu.add_command(label="Water Intake", command = self.waterIntake)
+        menu.add_command(label="Calorie Intake", command = self.foodIntake)
+        menu.add_command(label="Exercise Activity")
+        menu.add_command(label="Heart Rate Monitor")
+        menu.add_command(label="sleep analysis")
+        menubar.add_cascade(label="menu", menu=menu)
+
+        menubar.config(font=("Arial", 30))
+        self.root.config(menu=menubar)
+
+    def cognative_excercises(self):
+        self.destroy_widgets()
+        #creates title
+        title = tk.Label(self.root, text = "cognative excercise", font=("arial", 15, "bold"), fg="dark blue")
+        #places title at the top
+        title.place(x= 12, y=0)
+        #outputs title
+        title.pack()
+
+        self.navigation_btn()
+
+        """
+        more functionality for these buttons will be added later
+        """
+        #health stats block summary
+        stats_block = tk.Frame(self.root, bg="light grey", width=500, height=200)
+        stats_block.place(x=0, y=40)
+
+        #creates a counting game button
+        counting_btn = bt.Button(self.root, " Counting Excercises", 12, 270)
+        counting_btn.button_colour("Dark Blue")
+        counting_btn.size(2, 47)
+
+         #creates balencing game button
+        balencing_btn = bt.Button(self.root, "Balencing Excercise", 12, 310)
+        balencing_btn.button_colour("Dark Blue")
+        balencing_btn.text_colour("white")
+        balencing_btn.size(2, 47)
+
+        #creates memory game button
+        memory_btn = bt.Button(self.root, "Memory Excerise", 12, 350)
+        memory_btn.button_colour("Dark Blue")
+        memory_btn.text_colour("white")
+        memory_btn.size(2, 47)
+
+        #creates reaction game button
+        reaction_btn = bt.Button(self.root, "Reaction Excerise", 12, 390)
+        reaction_btn.button_colour("Dark Blue")
+        reaction_btn.text_colour("white")
+        reaction_btn.size(2, 47)
+
+    def waterIntake(self):
+        self.destroy_widgets()
+        #creates title
+        title = tk.Label(self.root, text = "Water Intake", font=("arial", 15, "bold"), fg="dark blue")
+        #places title at the top
+        title.place(x= 12, y=0)
+        #outputs the title
+        title.pack()
+        self.navigation_btn()
+        self.water_intake = waterIntake(self.root)
+        self.water_intake.create_GUI()
+
+    def foodIntake(self):
+        self.destroy_widgets()
+        calorie_intake = cl.CalorieIntake(self.root)
+        calorie_intake.create_GUI()
+
+
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+

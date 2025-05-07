@@ -26,3 +26,6 @@ class Button:
     #changes size of the button
     def size(self, height, width):
         self.button.config(height=height, width=width)
+
+    def delete(self):
+        self.button.destroy()
