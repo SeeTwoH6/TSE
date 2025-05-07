@@ -27,6 +27,8 @@ CREATE TABLE `exercise` (
   `ExerciseType` varchar(45) NOT NULL,
   `Duration` varchar(45) NOT NULL,
   `ExerciseUserID` int NOT NULL,
+  `Reps` int NOT NULL,
+  `Sets` int NOT NULL,
   PRIMARY KEY (`ExerciseID`),
   KEY `ExerciseUserID_idx` (`ExerciseUserID`),
   CONSTRAINT `ExerciseUserID` FOREIGN KEY (`ExerciseUserID`) REFERENCES `users` (`UserID`)
@@ -51,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-02 16:41:54
+-- Dump completed on 2025-05-06 10:34:28
