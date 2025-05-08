@@ -18,7 +18,7 @@ class Account:
         title.place(x= 12, y=0)
         #outputs the title
         title.pack()
-        labels = ["First Name", "Last Name", "Email", "Password","Date Of Birth", "Age", "Gender", "Height", "Weight"]
+        labels = ["First Name", "Last Name", "Password", "Email", "DateOfBirth", "Age", "Gender", "Height", "Weight"]
         entries = []
 
         for i, label in enumerate(labels):
@@ -27,10 +27,10 @@ class Account:
             entry.pack()
             entries.append(entry)
 
-            def submit():
-                values = [e.get() for e in entries]
-                self.addUserToDatabase(*values)
-                self.GUI.mainMenu()
+        def submit():
+            values = [e.get() for e in entries]
+            self.addUserToDatabase(*values)
+            self.GUI.mainMenu()
 
         login_link = tk.Label(self.root, text="go to login", fg="blue", cursor="hand2", font=("Arial", 10, "underline"))
         login_link.pack(pady=30)
@@ -42,10 +42,11 @@ class Account:
         submit_button.action(submit)
 
     def login(self, email, password):
+        result = ""
         try:
             # Connect to the MySQL database
             conn = mysql.connector.connect(
-                host="192.168.149.185",  
+                host="192.168.152.160",  
                 user="27738139",       
                 password="27738139EL",  
                 database="healthapp"    
@@ -55,17 +56,16 @@ class Account:
 
             if not email or not password:
                 messagebox.showerror("Error", "please enter a valid email and/or password")
-            query = "SELECT UserID from healthapp.user WHERE email = %s AND password =%s"
+            query = "SELECT UserID from healthapp.users WHERE email = %s AND password =%s"
             cursor.execute(query, (email, password))
-            conn.commit()
 
             print("Data inserted successfully.")
 
-            result = cursor.fetchone()
+            result = cursor.fetchone()[0]
             if result:
                 messagebox.showinfo("Login Successful")
             else:
-                messagebox.showerror("Invailid email and/or password")
+                messagebox.showerror("Invalid email and/or password")
 
 
         except mysql.connector.Error as error:
@@ -74,6 +74,7 @@ class Account:
             if conn.is_connected():
                 cursor.close()
                 conn.close()
+        return result
 
     
     def login_GUI(self):
@@ -108,22 +109,23 @@ class Account:
         submit_button.text_colour("white")
         submit_button.action(attempt_login)
 
-    def addUserToDatabase(firstName, lastName, password, email, DOB, age, gender, height, weight):
+    def addUserToDatabase(self, firstName, lastName, password, email, DOB, age, gender, height, weight):
             try:
                 # Connect to the MySQL database
                 conn = mysql.connector.connect(
-                    host="192.168.149.185",  
+                    host="192.168.152.160",  
                     user="27738139",       
                     password="27738139EL",  
                     database="healthapp"    
                 )
+                print(f"Conn: {conn}")
                 cursor = conn.cursor()
 
                 # Insert statement
-                query = "SELECT IFNULL((SELECT (MAX(UserID) +1) FROM healthapp.user), '1')"
+                query = "SELECT IFNULL((SELECT (MAX(UserID) +1) FROM healthapp.users), '1')"
                 cursor.execute(query)
                 userID = cursor.fetchone()[0]
-                query = "INSERT INTO healthapp.user (UserID, FirstName, LastName, Password, Email, DateOfBirth, Age, Gender, Height, Weight) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                query = "INSERT INTO healthapp.users (UserID, FirstName, LastName, Password, Email, DateOfBirth, Age, Gender, Height, Weight) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 cursor.execute(query, (userID, firstName, lastName, password, email, DOB, age, gender, height, weight))
                 conn.commit()
 
@@ -139,3 +141,12 @@ class Account:
                     conn.close()
 
 
+def main():
+    root = tk.Tk()
+    root.geometry("400x600")
+    app = Account(root)
+    app.register_GUI()
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()

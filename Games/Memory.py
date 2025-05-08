@@ -10,7 +10,7 @@ def insert_score_to_db(score):
     try:
         # Connect to the MySQL database
         conn = mysql.connector.connect(
-            host="192.168.149.185",
+            host="192.168.152.160",
             user="27738139",
             password="27738139EL",
             database="healthapp"

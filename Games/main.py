@@ -1,6 +1,6 @@
 import tkinter
 import GUI
-import account
+import Games.account as account
 
 def main():
     #creates a window

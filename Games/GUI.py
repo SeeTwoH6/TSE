@@ -7,6 +7,7 @@ import Counting
 import Memory
 import Reaction
 import account
+import AIBodyTracker
 
 class GUI:
     def __init__(self, root):
@@ -91,6 +92,22 @@ class GUI:
 
         menubar.config(font=("Arial", 30))
         self.root.config(menu=menubar)
+
+    def exercise_activity(self):
+        self.destroy_widgets()
+        #creates title
+        title = tk.Label(self.root, text = "Exercise Tracker", font=("arial", 15, "bold"), fg="dark blue")
+        #places title at the top
+        title.place(x= 12, y=0)
+        #outputs the title
+        title.pack()
+        self.navigation_btn()
+
+        exercise_btn = bt.Button(self.root, "Exercise Activity", 12, 270)
+        exercise_btn.button_colour("Dark Blue")
+        exercise_btn.text_colour("white")
+        exercise_btn.size(2, 47)
+        exercise_btn.action(AIBodyTracker.exercise())
 
     def cognative_excercises(self):
         self.destroy_widgets()
