@@ -84,21 +84,21 @@ while True:
         #Selection mode
         #1 fingers = Bicep Curls
         if fingers[1] and fingers[2] == False and fingers[3] == False and fingers[4] == False and fingers[0] == False:
-            if count > 0:
-                switch = False
-            else:
-                switch = True
-
             if exercise == "Bicep Curls":
-                modeChanged = False
                 count = 0
+                if count > 0:
+                    switch = False
+                else:
+                    switch = True
             else:
-                modeChanged = True
+                if count > 0:
+                    switch = False
+                else:
+                    switch = True
                 count += 1
 
             if switch:
                 startTime = time.time()
-                totalReps = 0
 
             if startTime > 0:
                 if time.time() - startTime > 2:
@@ -108,26 +108,28 @@ while True:
                         duration = time.time() - startDurationTimer
                         startDurationTimer = 0
                         print(f"Duration: {duration}")
-                        insertValues(exercise, sets, reps, duration)
+                        if totalReps > 0:
+                            insertValues(exercise, sets, reps, duration)
                     exercise = "Bicep Curls"
+                    totalReps = 0
 
         #2 fingers = Shoulder Press
         if fingers[1] and fingers[2] and fingers[3] == False and fingers[4] == False and fingers[0] == False:
-            if count > 0:
-                switch = False
-            else:
-                switch = True
-
             if exercise == "Shoulder Press":
-                modeChanged = False
                 count = 0
+                if count > 0:
+                    switch = False
+                else:
+                    switch = True
             else:
-                modeChanged = True
+                if count > 0:
+                    switch = False
+                else:
+                    switch = True
                 count += 1
 
             if switch:
                 startTime = time.time()
-                totalReps = 0
 
             if startTime > 0:
                 if time.time() - startTime > 2:
@@ -137,21 +139,24 @@ while True:
                         duration = time.time() - startDurationTimer
                         startDurationTimer = 0
                         print(f"Duration: {duration}")
-                        insertValues(exercise, sets, reps, duration)
+                        if totalReps > 0:
+                            insertValues(exercise, sets, reps, duration)
                     exercise = "Shoulder Press"
+                    totalReps = 0
 
         #3 fingers resets the exercise
         if (fingers[1] and fingers[2] and fingers[3] and fingers[4] == False and fingers[0] == False) or (fingers[2] and fingers[3] and fingers[4] and fingers[1] == False):
-            if count > 0:
-                switch = False
-            else:
-                switch = True
-
             if startExercise == False and (sets == 0 or reps == 0):
-                modeChanged = False
                 count = 0
+                if count > 0:
+                    switch = False
+                else:
+                    switch = True
             else:
-                modeChanged = True
+                if count > 0:
+                    switch = False
+                else:
+                    switch = True
                 count += 1
 
             if switch:
@@ -165,26 +170,29 @@ while True:
                         duration = time.time() - startDurationTimer
                         startDurationTimer = 0
                         print(f"Duration: {duration}")
-                        insertValues(exercise, sets, reps, duration)
+                        if totalReps > 0:
+                            insertValues(exercise, sets, reps, duration)
+                        
                     totalReps = 0
 
         #4 fingers starts the exercise
         if fingers[0] == False and fingers[1] and fingers[2] and fingers[3] and fingers[4]:
-            if count > 0:
-                switch = False
-            else:
-                switch = True
-
             if startExercise == True:
-                modeChanged = False
                 count = 0
+                if count > 0:
+                    switch = False
+                else:
+                    switch = True
             else:
-                modeChanged = True
+                if count > 0:
+                    switch = False
+                else:
+                    switch = True
                 count += 1
 
             if switch:
                 startTime = time.time()
-                if startDurationTimer != 0: #Starts the workout timer if it hasnt been started already
+                if startDurationTimer == 0: #Starts the workout timer if it hasnt been started already
                     startDurationTimer = time.time()
 
             if startTime > 0:
@@ -195,17 +203,20 @@ while True:
 
         #5 fingers stops the exercise
         if fingers[0] and fingers[1] and fingers[2] and fingers[3] and fingers[4]:
-            if count > 0:
-                switch = False
-            else:
-                switch = True
-
             if startExercise == False:
-                modeChanged = False
                 count = 0
+                if count > 0:
+                    switch = False
+                else:
+                    switch = True
             else:
-                modeChanged = True
+                if count > 0:
+                    switch = False
+                else:
+                    switch = True
                 count += 1
+
+
 
             if switch:
                 startTime = time.time()
@@ -217,7 +228,7 @@ while True:
                     startTime = 0
 
     if len(lmList) != 0:
-        shoulderPressAngle = detector.findAngle(img, 13,11,23)
+        shoulderPressAngle = detector.findAngle(img, 13,11,23, False)
         #Right Arm
         rightArm = detector.findAngle(img, 12,14,16)
         #Left Arm

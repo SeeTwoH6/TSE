@@ -5,7 +5,7 @@ import time
 #Most of the code is taken from https://www.youtube.com/watch?v=01sAkU_NvOY&t=668s
 
 class HandDetector():
-    def __init__(self, mode = False, maxHands = 2, modelComplexity = 1, detectCon = 0.5, trackCon = 0.5):
+    def __init__(self, mode = False, maxHands = 2, modelComplexity = 1, detectCon = 0.94, trackCon = 0.75):
         self.mode = mode
         self.maxHands = maxHands
         self.modelComplexity = modelComplexity
