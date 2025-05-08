@@ -183,3 +183,6 @@ def reaction_game():
 
         pg.display.update()
         clock.tick(60)
+
+        #returned for testing class
+        return display_surface, window_w, window_h

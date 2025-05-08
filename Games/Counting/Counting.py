@@ -26,7 +26,7 @@ def counting_game():
     bg.fill('lightblue')
 
     #Answer Box
-    answerBox = pg.image.load(f'Games/Counting/Images/answerBox.png')
+    answerBox = pg.image.load(f'Counting/Images/answerBox.png')
     answerBox = pg.transform.scale(answerBox, (screenWidth, 500))
 
 
@@ -51,7 +51,7 @@ def counting_game():
             self.x = x
             self.y = y
             self.cubeType = random.choice(cubeColours)  # Choose a fixed color at creation
-            self.image = pg.image.load(f'Games/Counting/Images/{self.cubeType}.png')
+            self.image = pg.image.load(f'Counting/Images/{self.cubeType}.png')
             cubeSize = (275,150)
             self.image = pg.transform.scale(self.image, cubeSize)
 
@@ -125,3 +125,5 @@ def counting_game():
 
         pg.display.update()
         clock.tick(60)
+        #returned for testing class
+        return screen, bg, answerBox, cubes, clock

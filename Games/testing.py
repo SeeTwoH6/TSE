@@ -2,7 +2,12 @@ import tkinter as tk
 import time
 from unittest.mock import MagicMock, patch
 import unittest
+import Counting.Counting
 import GUI
+import pygame as pg
+import Reaction
+import Counting
+import Memory
 
 class testing(unittest.TestCase):
     def setUp(self):
@@ -43,7 +48,6 @@ class testing(unittest.TestCase):
         self.app.mainMenu()
         self.assertTrue(mock_button.called)
         self.assertGreaterEqual(mock_button.call_count, 5)
-
     
     def test_main_menu_load_time(self):
         start = time.perf_counter()
@@ -79,5 +83,64 @@ class testing(unittest.TestCase):
         duration = end - start
         print(f"cognative games menu loaded in {duration:.4f} seconds")
         self.assertLess(duration, 0.5, "Main menu load took too long")
+    
+    def test_register_load_time(self):
+        start = time.perf_counter()
+        self.app.register()
+        end = time.perf_counter()
+        duration = end - start
+        print(f"register menu loaded in {duration:.4f} seconds")
+        self.assertLess(duration, 0.5, "Register load took too long")
+
+    def test_login_load_time(self):
+        start = time.perf_counter()
+        self.app.login()
+        end = time.perf_counter()
+        duration = end - start
+        print(f"login menu loaded in {duration:.4f} seconds")
+        self.assertLess(duration, 0.5, "Login load took too long")
+
+class PerformanceTestForGames(unittest.TestCase):
+    def setUp(cls):
+        pg.init()
+
+    def tearDown(cls):
+        pg.quit()
+
+    def test_reaction_game_performance(self):
+        start = time.perf_counter()
+        display_surface, window_h, window_w = Reaction.reaction_game()
+        end = time.perf_counter()
+
+        duration = end - start
+        print(f"Reaction game screen loaded in {duration:.4f} seconds")
+        self.assertIsNotNone(display_surface, "Display surface was not initalized")
+        self.assertLess(duration, 1.0, "Game load took too long")
+
+    def test_memory_game_performance(self):
+        start = time.perf_counter()
+        game = Memory.MemoryGame()
+        end = time.perf_counter()
+
+        duration = end - start
+        self.assertLess(duration, 1.0, "Game load took too long")
+
+        active_cells = [cell for cell in game.cells if 'num' in cell]
+        self.assertEqual(len(active_cells), game.active_count, "Incorrect number of active cells")
+        print(f"generated grid in {duration:.4f} seconds with {len(active_cells)} active cells")
+        
+    def test_counting_game_performance(self):
+        start = time.perf_counter()
+        screen, bg, answerBox, cubes, clock = Counting.Counting.counting_game()
+        end = time.perf_counter()
+
+        duration = end - start
+        print(f"Counting game screen loaded in {duration:.4f} seconds")
+        self.assertIsNotNone(len(cubes), "Display surface was not initalized")
+        self.assertLess(duration, 1.0, "Game load took too long")
+        
+
+
+
 
     

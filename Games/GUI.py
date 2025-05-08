@@ -13,8 +13,11 @@ class GUI:
         #creates tkinter window
         self.root = root
     
+    #function destroys all widgets in the window
     def destroy_widgets(self):
+        #gets the all widget in the window
         for widget in self.root.winfo_children():
+            #destroys all widgets in the window 
             widget.destroy()
 
     def mainMenu(self):
@@ -159,6 +162,8 @@ class GUI:
         self.account.register_GUI()
         
     def login(self):
+        if not hasattr(self, 'account'):
+            self.account = account.Account(self.root)
         self.account.login_GUI()
 
     

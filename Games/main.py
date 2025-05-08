@@ -10,8 +10,7 @@ def main():
     root.geometry("360x640")
     root.resizable(False, False)
     gui = GUI.GUI(root)
-    acc = account.Account(root)
-    acc.login_GUI()
+    gui.mainMenu()
     #GUI loop
     root.mainloop()
 

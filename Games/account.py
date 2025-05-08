@@ -7,14 +7,17 @@ import button as bt
 class Account:
     def __init__(self, root):
         self.root = root
-
-    def register_user(self, first_name, last_name, email, password, dateOfBirth, age, gender, height, weight):
         self.GUI = GUI.GUI(self.root)
-        ...
-        #call main using self.GUI.mainMenu() when registering is successful
 
     def register_GUI(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
+        title = tk.Label(self.root, text = "Register", font=("arial", 15, "bold"), fg="dark blue")
+        #places title at the top
+        title.place(x= 12, y=0)
+        #outputs the title
+        title.pack()
         labels = ["First Name", "Last Name", "Email", "Password","Date Of Birth", "Age", "Gender", "Height", "Weight"]
         entries = []
 
@@ -26,34 +29,79 @@ class Account:
 
             def submit():
                 values = [e.get() for e in entries]
-                self.register_user(*values)
+                self.addUserToDatabase(*values)
+                self.GUI.mainMenu()
 
-            submit_button = bt.Button(self.root, "Submit", 13, 500)
-            submit_button.size(2, 47)
-            submit_button.button_colour("dark blue")
-            submit_button.text_colour("white")
-            submit_button.action(submit)
+        login_link = tk.Label(self.root, text="go to login", fg="blue", cursor="hand2", font=("Arial", 10, "underline"))
+        login_link.pack(pady=30)
+        login_link.bind("<Button-1>", lambda e: self.login_GUI())
+        submit_button = bt.Button(self.root, "Submit", 13, 500)
+        submit_button.size(2, 47)
+        submit_button.button_colour("dark blue")
+        submit_button.text_colour("white")
+        submit_button.action(submit)
 
-    def login (self, username, password):
-        ...
-        #call main using self.GUI.mainMenu() when login is successful
+    def login(self, email, password):
+        try:
+            # Connect to the MySQL database
+            conn = mysql.connector.connect(
+                host="192.168.149.185",  
+                user="27738139",       
+                password="27738139EL",  
+                database="healthapp"    
+            )
+            cursor = conn.cursor()
+            # Insert statement
+
+            if not email or not password:
+                messagebox.showerror("Error", "please enter a valid email and/or password")
+            query = "SELECT UserID from healthapp.user WHERE email = %s AND password =%s"
+            cursor.execute(query, (email, password))
+            conn.commit()
+
+            print("Data inserted successfully.")
+
+            result = cursor.fetchone()
+            if result:
+                messagebox.showinfo("Login Successful")
+            else:
+                messagebox.showerror("Invailid email and/or password")
+
+
+        except mysql.connector.Error as error:
+            messagebox.showerror("Error", f"Database Connection Error: {error}")
+        finally:
+            if conn.is_connected():
+                cursor.close()
+                conn.close()
 
     
     def login_GUI(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
-        tk.Label(self.root, text="Email:").grid(row=0, column=0, sticky="w")
-        email_entry = tk.Entry(self.root, width=30)
-        email_entry.grid(row=0, column=1)
         
-        tk.Label(self.root, text="Password:").grid(row=1, column=0, sticky="w")
-        password_entry = tk.Entry(self.root, width=30)
-        password_entry.grid(row=1, column=1)
+        title = tk.Label(self.root, text = "Login", font=("arial", 15, "bold"), fg="dark blue")
+        #places title at the top
+        title.grid(row=0, column=0, columnspan=2, pady=10)
+        tk.Label(self.root, text="Email:", font=("Arial", 12)).grid(row=1, column=0, pady=20, sticky="e")
+        email_entry = tk.Entry(self.root, width=30, font=("Arial", 12))
+        email_entry.grid(row=1, column=1, pady=20)
+        
+        tk.Label(self.root, text="Password:", font=("Arial", 12)).grid(row=2, column=0, pady=10, sticky="e")
+        password_entry = tk.Entry(self.root, width=30, show="*", font=("Arial", 12))
+        password_entry.grid(row=2, column=1, pady=20)
 
         def attempt_login():
             email = email_entry.get()
             password = password_entry.get()
-            self.login_user(email, password)
+            self.login(email, password)
+            self.GUI.mainMenu()
 
+        register_link = tk.Label(self.root, text="Don't have an account? Register here", fg="blue", cursor="hand2", font=("Arial", 10, "underline"))
+        register_link.grid(row=3, column=0, columnspan=2, pady=10)
+        register_link.bind("<Button-1>", lambda e: self.register_GUI())
+        submit_button = bt.Button(self.root, "Submit", 13, 500)
         submit_button = bt.Button(self.root, "Submit", 13, 500)
         submit_button.size(2, 47)
         submit_button.button_colour("dark blue")
@@ -82,7 +130,9 @@ class Account:
                 print("Data inserted successfully.")
 
             except mysql.connector.Error as error:
-                print(f"Database Connection Error: {error}")
+                messagebox.showerror("Error", f"Database Connection Error: {error}")
+            except mysql.connector.IntegrityError as error:
+                messagebox.showerror("Error", "Email has already been used")
             finally:
                 if conn.is_connected():
                     cursor.close()
