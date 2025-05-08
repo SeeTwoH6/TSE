@@ -2,7 +2,37 @@ import tkinter as tk
 import pygame
 import random
 import sys
+import mysql.connector
 print(pygame.ver)
+
+#Connect to database
+def insert_score_to_db(score):
+    try:
+        # Connect to the MySQL database
+        conn = mysql.connector.connect(
+            host="192.168.149.185",           # or your DB host
+            user="27738139",       # MySQL username
+            password="27738139EL",   # MySQL password
+            database="healthapp"    # Name of your database
+        )
+        cursor = conn.cursor()
+
+        # Insert statement
+        query = "SELECT IFNULL((SELECT (MAX(CognitiveID) +1) FROM healthapp.cognitivescores), '1')"
+        cursor.execute(query)
+        cognitiveID = cursor.fetchone()[0]
+        query = "INSERT INTO healthapp.cognitivescores (CognitiveID, GameType, GameScore, Date, CognitiveUserID) VALUES (%s, %s, %s, NOW(), %s)"
+        cursor.execute(query, (cognitiveID, "Memory", str(score), 1))
+        conn.commit()
+
+        print("Data inserted successfully.")
+
+    except mysql.connector.Error as error:
+        print(f"Database Connection Error: {error}")
+    finally:
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
 
 # Initialise pygame colours and constants
 WIDTH, HEIGHT = 800, 600
@@ -129,8 +159,10 @@ class MemoryGame:
 
     def game_over(self):
         print(f"Game Over! Final Score: {self.score}")
+        insert_score_to_db(self.score)
         pygame.quit()
         sys.exit()
+
 
 def main_game():
     global screen, font
@@ -162,6 +194,9 @@ def main_game():
 def launch_game():
     # launcher.destroy()
     main_game()
+
+# if __name__ == "__main__":
+#     launch_game()
 
 # launcher = tk.Tk()
 # launcher.title("Memory Number Game Launcher")

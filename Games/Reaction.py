@@ -46,7 +46,7 @@ def reaction_game():
             )
             cursor = conn.cursor()
 
-            # Insert statement (assuming ExerciseID is AUTO_INCREMENT)
+            # Insert statement
             query = "SELECT IFNULL((SELECT (MAX(CognitiveID) +1) FROM healthapp.cognitivescores), '1')"
             cursor.execute(query)
             cognitiveID = cursor.fetchone()[0]
@@ -57,7 +57,7 @@ def reaction_game():
             print("Data inserted successfully.")
 
         except mysql.connector.Error as error:
-            print(f"Databse Connection Error: {error}")
+            print(f"Database Connection Error: {error}")
         finally:
             if conn.is_connected():
                 cursor.close()

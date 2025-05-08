@@ -32,7 +32,6 @@ startExercise = False
 
 count = 0
 switch = True
-modeChanged = False
 startTime = 0
 
 startDurationTimer = 0
@@ -67,12 +66,16 @@ while True:
     success, img = cap.read()
     img = cv2.resize(img, (1280, 720))
     #If flag == False, then the rest of the landmarks and lines are not drawn
+
+    #For finding the body positions of the user
     img = detector.findPose(img, False)
     lmList = detector.findPosePosition(img, False)
 
+    #For finding the hand position of the user
     img = handDetector.findHands(img)
     handLmList = handDetector.findHandPosition(img, draw = False)
 
+    #This code does not run until a hand is recognised
     if len(handLmList) != 0:
         #Tip of index and middle fingers
         x1,y1 = handLmList[8][1:]
@@ -84,10 +87,10 @@ while True:
         #Selection mode
         #1 fingers = Bicep Curls
         if fingers[1] and fingers[2] == False and fingers[3] == False and fingers[4] == False and fingers[0] == False:
-            if exercise == "Bicep Curls":
-                count = 0
+            if exercise == "Bicep Curls":  #This means that the user is attempting to switch to the mode they are already on
+                count = 0 
                 if count > 0:
-                    switch = False
+                    switch = False #If the user is attempting to switch to the mode they are already on, we do not want to start the startTime timer
                 else:
                     switch = True
             else:
@@ -98,19 +101,19 @@ while True:
                 count += 1
 
             if switch:
-                startTime = time.time()
+                startTime = time.time() #This is the timer that switches modes after 2 seconds
 
-            if startTime > 0:
+            if startTime > 0: #Checking if the timer has been started first
                 if time.time() - startTime > 2:
                     print("Switching to bicep curls")
-                    startTime = 0
+                    startTime = 0 #Reset timer
                     if startDurationTimer > 0:
-                        duration = time.time() - startDurationTimer
-                        startDurationTimer = 0
+                        duration = time.time() - startDurationTimer #Calculate the length of workout
+                        startDurationTimer = 0 #Reset the variable required to perform the calculation above
                         print(f"Duration: {duration}")
-                        if totalReps > 0:
-                            insertValues(exercise, sets, reps, duration)
-                    exercise = "Bicep Curls"
+                        if totalReps > 0: #Checking if totalReps > 0 first because we do not want to bloat the database with 0 rep workouts
+                            insertValues(exercise, sets, reps, duration) #Add values to the database
+                    exercise = "Bicep Curls" #Perform the action defined at the start
                     totalReps = 0
 
         #2 fingers = Shoulder Press
@@ -134,14 +137,14 @@ while True:
             if startTime > 0:
                 if time.time() - startTime > 2:
                     print("Switching to shoulder press")
-                    startTime = 0
+                    startTime = 0 #Reset timer
                     if startDurationTimer > 0:
-                        duration = time.time() - startDurationTimer
-                        startDurationTimer = 0
+                        duration = time.time() - startDurationTimer #Calculate the length of workout
+                        startDurationTimer = 0 #Reset the variable required to perform the calculation above
                         print(f"Duration: {duration}")
-                        if totalReps > 0:
-                            insertValues(exercise, sets, reps, duration)
-                    exercise = "Shoulder Press"
+                        if totalReps > 0: #Checking if totalReps > 0 first because we do not want to bloat the database with 0 rep workouts
+                            insertValues(exercise, sets, reps, duration) #Add values to the database
+                    exercise = "Shoulder Press" #Perform the action defined at the start
                     totalReps = 0
 
         #3 fingers resets the exercise
@@ -165,14 +168,14 @@ while True:
             if startTime > 0:
                 if time.time() - startTime > 2:
                     print("Restarting")
-                    startExercise = False
+                    startTime = 0 #Reset timer
                     if startDurationTimer > 0:
-                        duration = time.time() - startDurationTimer
-                        startDurationTimer = 0
+                        duration = time.time() - startDurationTimer #Calculate the length of workout
+                        startDurationTimer = 0 #Reset the variable required to perform the calculation above
                         print(f"Duration: {duration}")
-                        if totalReps > 0:
-                            insertValues(exercise, sets, reps, duration)
-                        
+                        if totalReps > 0: #Checking if totalReps > 0 first because we do not want to bloat the database with 0 rep workouts
+                            insertValues(exercise, sets, reps, duration) #Add values to the database
+
                     totalReps = 0
 
         #4 fingers starts the exercise
@@ -228,6 +231,7 @@ while True:
                     startTime = 0
 
     if len(lmList) != 0:
+        #This angle is used for detecting whether the user performs a shoulder press properly
         shoulderPressAngle = detector.findAngle(img, 13,11,23, False)
         #Right Arm
         rightArm = detector.findAngle(img, 12,14,16)
