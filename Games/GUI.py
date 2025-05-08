@@ -1,7 +1,12 @@
 import tkinter as tk
+import Counting.Counting
 import button as bt
 from water import waterIntake
 import calorie as cl
+import Counting
+import Memory
+import Reaction
+import account
 
 class GUI:
     def __init__(self, root):
@@ -105,9 +110,11 @@ class GUI:
         #creates a counting game button
         counting_btn = bt.Button(self.root, " Counting Excercises", 12, 270)
         counting_btn.button_colour("Dark Blue")
+        counting_btn.text_colour("white")
         counting_btn.size(2, 47)
+        counting_btn.action(Counting.Counting.counting_game)
 
-         #creates balencing game button
+        #creates balencing game button
         balencing_btn = bt.Button(self.root, "Balencing Excercise", 12, 310)
         balencing_btn.button_colour("Dark Blue")
         balencing_btn.text_colour("white")
@@ -118,12 +125,15 @@ class GUI:
         memory_btn.button_colour("Dark Blue")
         memory_btn.text_colour("white")
         memory_btn.size(2, 47)
+        memory_btn.action(Memory.launch_game)
 
         #creates reaction game button
         reaction_btn = bt.Button(self.root, "Reaction Excerise", 12, 390)
         reaction_btn.button_colour("Dark Blue")
         reaction_btn.text_colour("white")
         reaction_btn.size(2, 47)
+        reaction_btn.action(Reaction.reaction_game)
+
 
     def waterIntake(self):
         self.destroy_widgets()
@@ -143,6 +153,13 @@ class GUI:
         self.calorie_intake = cl.CalorieIntake(self.root)
         self.calorie_intake.create_GUI()
 
+    def register(self):
+        self.destroy_widgets()
+        self.account = account.Account(self.root)
+        self.account.register_GUI()
+        
+    def login(self):
+        self.account.login_GUI()
 
     
 

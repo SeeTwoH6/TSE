@@ -1,5 +1,6 @@
 import tkinter
 import GUI
+import account
 
 def main():
     #creates a window
@@ -9,7 +10,8 @@ def main():
     root.geometry("360x640")
     root.resizable(False, False)
     gui = GUI.GUI(root)
-    gui.mainMenu()
+    acc = account.Account(root)
+    acc.login_GUI()
     #GUI loop
     root.mainloop()
 

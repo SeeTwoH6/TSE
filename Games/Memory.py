@@ -160,14 +160,14 @@ def main_game():
 
 # Tkinter Launcher
 def launch_game():
-    launcher.destroy()
+    # launcher.destroy()
     main_game()
 
-launcher = tk.Tk()
-launcher.title("Memory Number Game Launcher")
-launcher.geometry("300x150")
-label = tk.Label(launcher, text="Welcome to Memory Number Game")
-label.pack(pady=20)
-start_button = tk.Button(launcher, text="Start Game", command=launch_game)
-start_button.pack(pady=10)
-launcher.mainloop()
+# launcher = tk.Tk()
+# launcher.title("Memory Number Game Launcher")
+# launcher.geometry("300x150")
+# label = tk.Label(launcher, text="Welcome to Memory Number Game")
+# label.pack(pady=20)
+# start_button = tk.Button(launcher, text="Start Game", command=launch_game)
+# start_button.pack(pady=10)
+# launcher.mainloop()
