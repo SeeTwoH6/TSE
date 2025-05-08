@@ -39,10 +39,10 @@ def reaction_game():
         try:
             # Connect to the MySQL database
             conn = mysql.connector.connect(
-                host="192.168.149.185",           # or your DB host
-                user="27738139",       # MySQL username
-                password="27738139EL",   # MySQL password
-                database="healthapp"    # Name of your database
+                host="192.168.149.185",          
+                user="27738139",      
+                password="27738139EL",   
+                database="healthapp"    
             )
             cursor = conn.cursor()
 

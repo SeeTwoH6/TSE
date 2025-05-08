@@ -60,6 +60,32 @@ class Account:
         submit_button.text_colour("white")
         submit_button.action(attempt_login)
 
+    def addUserToDatabase(firstName, lastName, password, email, DOB, age, gender, height, weight):
+            try:
+                # Connect to the MySQL database
+                conn = mysql.connector.connect(
+                    host="192.168.149.185",  
+                    user="27738139",       
+                    password="27738139EL",  
+                    database="healthapp"    
+                )
+                cursor = conn.cursor()
 
+                # Insert statement
+                query = "SELECT IFNULL((SELECT (MAX(UserID) +1) FROM healthapp.user), '1')"
+                cursor.execute(query)
+                userID = cursor.fetchone()[0]
+                query = "INSERT INTO healthapp.user (UserID, FirstName, LastName, Password, Email, DateOfBirth, Age, Gender, Height, Weight) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.execute(query, (userID, firstName, lastName, password, email, DOB, age, gender, height, weight))
+                conn.commit()
+
+                print("Data inserted successfully.")
+
+            except mysql.connector.Error as error:
+                print(f"Database Connection Error: {error}")
+            finally:
+                if conn.is_connected():
+                    cursor.close()
+                    conn.close()
 
 
